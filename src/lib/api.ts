@@ -25,8 +25,8 @@ const handleApiError = (error: AxiosError) => {
 // Helper function to attach Authorization header (use session)
 const attachAuthHeader = async (config: any) => {
   const session = await getSession();
-  if (session && session.id_token) {
-    config.headers.Authorization = `Bearer ${session.id_token}`; // Use id_token from next-auth
+  if (session ) {
+    // config.headers.Authorization = `Bearer ${session.id_token}`; // Use id_token from next-auth  right now comment, will correct it.
   }
   return config;
 };

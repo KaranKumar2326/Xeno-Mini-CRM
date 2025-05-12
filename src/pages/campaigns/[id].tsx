@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { getCampaignDetails } from '../../lib/api';
 
+import type { Campaign } from '../../types'; // Adjust the import path based on your project structure
+
 export default function CampaignDetails() {
   const router = useRouter();
   const { id } = router.query;
@@ -67,10 +69,10 @@ export default function CampaignDetails() {
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">Delivery Statistics</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-blue-50 p-4 rounded">
+          {/* <div className="bg-blue-50 p-4 rounded">
             <h3 className="text-sm font-medium text-blue-800">Total Sent</h3>
             <p className="text-2xl font-bold">{campaign.totalCount}</p>
-          </div>
+          </div> */}
           <div className="bg-green-50 p-4 rounded">
             <h3 className="text-sm font-medium text-green-800">Successful</h3>
             <p className="text-2xl font-bold">{campaign.sentCount}</p>

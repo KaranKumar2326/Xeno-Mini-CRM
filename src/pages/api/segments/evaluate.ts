@@ -1,6 +1,6 @@
 // pages/api/segments/evaluate.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { RuleGroup } from '../../types';
+import { RuleGroup } from '../../../types/index';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

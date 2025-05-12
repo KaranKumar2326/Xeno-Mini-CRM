@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { RuleGroup, Segment } from '../../types'; // Adjust the path to where RuleGroup and Segment are defined
 import { useRouter } from 'next/router';
 import RuleBuilder from '../../components/campaign/RuleBuilder';
 import SegmentPreview from '../../components/campaign/SegmentPreview';
