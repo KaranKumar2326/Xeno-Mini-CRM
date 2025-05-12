@@ -1,102 +1,137 @@
 import Image from "next/image";
+import Link from "next/link";
+import { CheckCircle, Users, ChartBar, ShieldCheck } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen">
+      {/* Navigation */}
+      <nav className="px-6 py-4 flex justify-between items-center shadow-sm bg-white">
+        <div className="flex items-center space-x-4">
+          <span className="text-2xl font-bold text-blue-800">Xeno CRM</span>
+        </div>
+        <div className="flex items-center space-x-6">
+          <Link href="/features" className="text-gray-700 hover:text-blue-600 transition">
+            Features
+          </Link>
+          <Link href="/pricing" className="text-gray-700 hover:text-blue-600 transition">
+            Pricing
+          </Link>
+          {/* Corrected Login Button */}
+          <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            Login
+          </Link>
+        </div>
+      </nav>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <main className="container mx-auto px-6 py-16 grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            Revolutionize Your Customer Relationship Management
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Xeno CRM helps you streamline customer interactions, boost sales, and drive growth with intelligent insights.
+          </p>
+          <div className="flex space-x-4">
+            <Link href="/signup" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition text-lg font-semibold">
+              Start Free Trial
+            </Link>
+            <Link href="/demo" className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition text-lg">
+              Watch Demo
+            </Link>
+          </div>
+        </div>
+        <div className="relative">
+          <Image
+            // image from unsplash online
+            src="https://images.unsplash.com/photo-1520333789090-1afc82db536a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y3JtfGVufDB8fDB8fHwy"
+            alt="CRM Dashboard"
+            width={600}
+            height={400}
+            className="rounded-xl shadow-2xl"
+          />
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Features Section */}
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-12">
+            Powerful Features for Your Business
+          </h2>
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
+              <Users className="mx-auto mb-4 text-blue-600" size={48} />
+              <h3 className="text-xl font-semibold mb-2">Customer Tracking</h3>
+              <p className="text-gray-600">Comprehensive customer profiles and interaction history.</p>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
+              <ChartBar className="mx-auto mb-4 text-blue-600" size={48} />
+              <h3 className="text-xl font-semibold mb-2">Sales Analytics</h3>
+              <p className="text-gray-600">Intuitive dashboards and predictive insights.</p>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
+              <ShieldCheck className="mx-auto mb-4 text-blue-600" size={48} />
+              <h3 className="text-xl font-semibold mb-2">Data Security</h3>
+              <p className="text-gray-600">Enterprise-grade security and compliance.</p>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
+              <CheckCircle className="mx-auto mb-4 text-blue-600" size={48} />
+              <h3 className="text-xl font-semibold mb-2">Task Automation</h3>
+              <p className="text-gray-600">Streamline workflows and boost productivity.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="bg-blue-600 text-white py-16 text-center">
+        <h2 className="text-4xl font-bold mb-6">
+          Ready to Transform Your Customer Management?
+        </h2>
+        <p className="text-xl mb-8">
+          Join thousands of businesses using Xeno CRM to drive growth and efficiency.
+        </p>
+        <div className="flex justify-center space-x-4">
+          {/* This Login button remains as it's in the CTA, not the nav */}
+          <Link
+            href="/login"
+            className="border border-white text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition text-lg font-semibold"
+          >
+            Login
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4">Xeno CRM</h3>
+            <p className="text-gray-400">Empowering businesses with intelligent customer relationship management.</p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2">
+              <li><Link href="/features" className="text-gray-400 hover:text-white">Features</Link></li>
+              <li><Link href="/pricing" className="text-gray-400 hover:text-white">Pricing</Link></li>
+              <li><Link href="/demo" className="text-gray-400 hover:text-white">Demo</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Contact</h4>
+            <ul className="space-y-2">
+              <li><Link href="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
+              <li><Link href="/contact" className="text-gray-400 hover:text-white">Contact Support</Link></li>
+              {/* This Login link remains in the footer */}
+              <li><Link href="/login" className="text-gray-400 hover:text-white">Login</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className="container mx-auto px-6 mt-8 pt-8 border-t border-gray-800 text-center">
+          <p className="text-gray-400">&copy; 2025 Xeno CRM. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
