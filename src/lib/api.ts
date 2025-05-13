@@ -1,9 +1,12 @@
+/* eslint-disable */
+
+
 import axios, { AxiosError } from 'axios';
 import { Campaign, RuleGroup, Segment } from '../types';
 import { getSession } from 'next-auth/react'; // Import next-auth's getSession
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://xeno-mini-crm-server.onrender.com/api',
   timeout: 10000, // 10 second timeout
 });
 

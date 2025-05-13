@@ -8,6 +8,8 @@ interface ExcelCustomer {
   email: string;
   totalSpend?: number;
   visitCount?: number;
+  Visits?: number; // Add Visits property to match the Excel data
+  TotalSpend?: number; // Add TotalSpend property to match the Excel data
 }
 
 const ExcelImport = () => {
@@ -33,8 +35,8 @@ const ExcelImport = () => {
         // Validate and transform data
         const validatedData = jsonData
           .map((item) => ({
-            name: item.Name || '', // Use 'Name' instead of 'name'
-            email: item.Email || '', // Use 'Email' instead of 'email'
+            name: item.name || '', // Use 'Name' instead of 'name'
+            email: item.email || '', // Use 'Email' instead of 'email'
             totalSpend: Number(item.TotalSpend || 0), // Use 'TotalSpend' instead of 'totalSpend'
             visitCount: Number(item.Visits || 0), // Use 'Visits' instead of 'visitCount'
           }))
