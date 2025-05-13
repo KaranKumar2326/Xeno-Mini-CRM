@@ -21,7 +21,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.3",
-    "react-router-dom": "^7.6.0"
+    "react-router-dom": "^7.6.0",
+    "three": "^0.176.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

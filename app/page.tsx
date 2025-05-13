@@ -1,138 +1,172 @@
-import Image from "next/image";
-import Link from "next/link";
-import { CheckCircle, Users, ChartBar, ShieldCheck } from "lucide-react";
+// import { useEffect, useRef } from 'react';
+// dont use useEffect and useRef
+"use client";
+import  { useEffect, useRef } from 'react';
+import * as THREE from 'three';
+import Link from 'next/link';
 
-export default function Home() {
+export default function ThreeDWebsite() {
+  const mountRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Three.js initialization
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (mountRef.current) {
+      mountRef.current.appendChild(renderer.domElement);
+    }
+
+    // Set background to white
+    renderer.setClearColor(0xffffff, 0);
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+
+    // Create 3D objects
+    const geometry = new THREE.IcosahedronGeometry(2, 0);
+    const material = new THREE.MeshPhongMaterial({ 
+      color: 0x000000,
+      wireframe: false,
+      shininess: 100,
+      specular: 0x111111
+    });
+    const icosahedron = new THREE.Mesh(geometry, material);
+    scene.add(icosahedron);
+
+    // Add floating cubes
+    const cubes: THREE.Mesh[] = [];
+    for (let i = 0; i < 10; i++) {
+      const size = Math.random() * 0.5 + 0.3;
+      const cubeGeometry = new THREE.BoxGeometry(size, size, size);
+      const cubeMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x000000,
+        wireframe: true 
+      });
+      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      
+      cube.position.x = (Math.random() - 0.5) * 10;
+      cube.position.y = (Math.random() - 0.5) * 10;
+      cube.position.z = (Math.random() - 0.5) * 10;
+      
+      cube.userData = {
+        speed: Math.random() * 0.02 + 0.01,
+        rotation: Math.random() * 0.02 + 0.01
+      };
+      
+      scene.add(cube);
+      cubes.push(cube);
+    }
+
+    camera.position.z = 5;
+
+    // Animation loop
+    const animate = function () {
+      requestAnimationFrame(animate);
+
+      icosahedron.rotation.x += 0.005;
+      icosahedron.rotation.y += 0.01;
+
+      // Animate floating cubes
+      cubes.forEach(cube => {
+        cube.rotation.x += cube.userData.rotation;
+        cube.rotation.y += cube.userData.rotation;
+        
+        // Bounce within bounds
+        if (cube.position.x > 8 || cube.position.x < -8) {
+          cube.userData.speed = -cube.userData.speed;
+        }
+        cube.position.x += cube.userData.speed;
+      });
+
+      renderer.render(scene, camera);
+    };
+
+    // Handle window resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+    };
+  }, []);
+
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen">
-      {/* Navigation */}
-      <nav className="px-6 py-4 flex justify-between items-center shadow-sm bg-white">
-        <div className="flex items-center space-x-4">
-          <span className="text-2xl font-bold text-blue-800">Xeno CRM</span>
-        </div>
-        <div className="flex items-center space-x-6">
-          <Link href="/features" className="text-gray-700 hover:text-blue-600 transition">
-            Features
-          </Link>
-          <Link href="/pricing" className="text-gray-700 hover:text-blue-600 transition">
-            Pricing
-          </Link>
-          {/* Corrected Login Button */}
-          <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-            Login
-          </Link>
-        </div>
-      </nav>
+    <div className="relative min-h-screen bg-white">
+      {/* Three.js canvas */}
+      <div ref={mountRef} className="fixed top-0 left-0 w-full h-full z-0" />
+      
+      {/* Content overlay */}
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Navigation */}
+        <nav className="px-8 py-6 flex justify-between items-center">
+          <div className="text-2xl font-bold tracking-tighter">
+            <span className="bg-black text-white px-3 py-1">XENO MINI CRM</span> 
+          </div>
+          <div className="flex items-center space-x-6">
+            
+            <Link 
+              href="/login" 
+              className="border-2 border-black px-4 py-2 rounded bg-yellow-500 hover:bg-black hover:text-white transition"
+            >
+              Login
+            </Link>
+          </div>
+        </nav>
 
-      {/* Hero Section */}
-      <main className="container mx-auto px-6 py-16 grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Revolutionize Your Customer Relationship Management
+        {/* Hero Section */}
+        <main className="flex-grow flex flex-col items-center justify-center px-6 text-center">
+          <h1 className="text-6xl font-bold mb-6 tracking-tight">
+            <span className="bg-black text-orange-500 px-4 py-2">MANAGE YOUR</span> <span className=' text-blue-500 px-4 py-2'>CUSTOMERS</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Xeno CRM helps you streamline customer interactions, boost sales, and drive growth with intelligent insights.
+          <p className="text-xl max-w-2xl text-green-500 mb-12">
+            Experience the real productivity with our CRM.
           </p>
           <div className="flex space-x-4">
-            <Link href="/signup" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition text-lg font-semibold">
-              Start Free Trial
+            
+            <Link 
+              href="/login" 
+              className="bg-white text-black px-8 py-3 rounded hover:bg-gray-900 transition font-medium"
+            >
+              Login
             </Link>
-            <Link href="/demo" className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition text-lg">
-              Watch Demo
-            </Link>
           </div>
-        </div>
-        <div className="relative">
-          <Image
-            // image from unsplash online
-            src="https://images.unsplash.com/photo-1520333789090-1afc82db536a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y3JtfGVufDB8fDB8fHwy"
-            alt="CRM Dashboard"
-            width={600}
-            height={400}
-            className="rounded-xl shadow-2xl"
-          />
-        </div>
-      </main>
+        </main>
 
-      {/* Features Section */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12">
-            Powerful Features for Your Business
-          </h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
-              <Users className="mx-auto mb-4 text-blue-600" size={48} />
-              <h3 className="text-xl font-semibold mb-2">Customer Tracking</h3>
-              <p className="text-gray-600">Comprehensive customer profiles and interaction history.</p>
+        {/* Floating indicators */}
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center space-x-12">
+          {['3D', 'ART', 'DESIGN', 'BLACK/WHITE'].map((item) => (
+            <div key={item} className="text-sm tracking-widest rotate-90 origin-bottom-left">
+              {item}
             </div>
-            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
-              <ChartBar className="mx-auto mb-4 text-blue-600" size={48} />
-              <h3 className="text-xl font-semibold mb-2">Sales Analytics</h3>
-              <p className="text-gray-600">Intuitive dashboards and predictive insights.</p>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
-              <ShieldCheck className="mx-auto mb-4 text-blue-600" size={48} />
-              <h3 className="text-xl font-semibold mb-2">Data Security</h3>
-              <p className="text-gray-600">Enterprise-grade security and compliance.</p>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-xl hover:shadow-lg transition">
-              <CheckCircle className="mx-auto mb-4 text-blue-600" size={48} />
-              <h3 className="text-xl font-semibold mb-2">Task Automation</h3>
-              <p className="text-gray-600">Streamline workflows and boost productivity.</p>
-            </div>
-          </div>
+          ))}
         </div>
-      </section>
 
-      {/* Call to Action */}
-      <section className="bg-blue-600 text-white py-16 text-center">
-        <h2 className="text-4xl font-bold mb-6">
-          Ready to Transform Your Customer Management?
-        </h2>
-        <p className="text-xl mb-8">
-          Join thousands of businesses using Xeno CRM to drive growth and efficiency.
-        </p>
-        <div className="flex justify-center space-x-4">
-          {/* This Login button remains as it's in the CTA, not the nav */}
-          <Link
-            href="/login"
-            className="border border-white text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition text-lg font-semibold"
-          >
-            Login
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="text-xl font-bold mb-4">Xeno CRM</h3>
-            <p className="text-gray-400">Empowering businesses with intelligent customer relationship management.</p>
+        {/* Footer */}
+        <footer className="px-8 py-6 text-sm flex justify-between">
+          <div>© 2025 3D SPACE</div>
+          <div className="flex space-x-4">
+            <Link href="#" className="hover:underline">Terms</Link>
+            <Link href="#" className="hover:underline">Privacy</Link>
+            <Link href="/login" className="hover:underline">Login</Link>
           </div>
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li><Link href="/features" className="text-gray-400 hover:text-white">Features</Link></li>
-              <li><Link href="/pricing" className="text-gray-400 hover:text-white">Pricing</Link></li>
-              <li><Link href="/demo" className="text-gray-400 hover:text-white">Demo</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-2">
-              <li><Link href="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
-              <li><Link href="/contact" className="text-gray-400 hover:text-white">Contact Support</Link></li>
-              {/* This Login link remains in the footer */}
-              <li><Link href="/login" className="text-gray-400 hover:text-white">Login</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className="container mx-auto px-6 mt-8 pt-8 border-t border-gray-800 text-center">
-          <p className="text-gray-400">&copy; 2025 Xeno CRM. All rights reserved.</p>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }
