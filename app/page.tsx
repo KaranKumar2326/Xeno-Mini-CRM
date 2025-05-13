@@ -145,6 +145,12 @@ export default function ThreeDWebsite() {
             >
               Login
             </Link>
+            <Link 
+              href="https://xeno-mini-crm-server.onrender.com/api-docs/" 
+              className="bg-white text-black px-8 py-3 rounded hover:bg-gray-900 transition font-medium"
+            >
+              Swagger Docs
+            </Link>
           </div>
         </main>
 
