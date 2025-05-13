@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-// Custom Google Icon Component (kept as is)
+// Custom Google Icon Component
 const GoogleIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -23,20 +23,21 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Handle the OAuth callback when component mounts (functionality kept as is)
+  // Handle the OAuth callback when the component mounts
   useEffect(() => {
-    const { token, error: queryError } = router.query; // Renamed error to queryError to avoid naming conflict
+    const { token, error: queryError } = router.query;
 
     if (token) {
       try {
+        // Store token in localStorage
         localStorage.setItem('token', token as string);
-        router.push('/campaigns'); // Redirect to campaigns page
+        router.push('/dashboard'); // Redirect to the dashboard after successful login
       } catch (storageError) {
         setError('Unable to store authentication token');
       }
     }
 
-    if (queryError) { // Use queryError here
+    if (queryError) {
       console.error('Login error:', queryError);
       setError(queryError as string);
     }
@@ -46,16 +47,13 @@ const LoginPage: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // This will redirect the user to the backend OAuth endpoint (functionality kept as is)
-    window.location.href = 'http://localhost:3001/api/auth/google';
+    // This will redirect the user to the backend OAuth endpoint
+    window.location.href = 'https://xeno-mini-crm-server.onrender.com/auth/google';
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 py-12">
-      {/* Replaced motion.div with a regular div */}
-      <div
-        className="w-full max-w-md bg-white shadow-xl rounded-xl p-8 space-y-6 border border-gray-200 transform transition duration-500 ease-out opacity-100 scale-100" // Added initial appearance classes
-      >
+      <div className="w-full max-w-md bg-white shadow-xl rounded-xl p-8 space-y-6 border border-gray-200 transform transition duration-500 ease-out opacity-100 scale-100">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-3">
             Welcome to Xeno CRM
@@ -66,23 +64,10 @@ const LoginPage: React.FC = () => {
         </div>
 
         {error && (
-          /* Replaced motion.div with a regular div and added Tailwind transition/animation classes */
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-center text-sm opacity-100 transition duration-300 ease-out"
-          >
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-center text-sm opacity-100 transition duration-300 ease-out">
             {error}
           </div>
         )}
-
-        {/* Standard Login Form */}
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
-             
-
-            
-            
-            
-        </form>
-
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -95,24 +80,10 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Google Login Button (Replaced motion.button with regular button) */}
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
-          className={`
-            w-full flex items-center justify-center
-            py-2 px-4
-            bg-white
-            text-gray-700
-            border border-gray-300
-            rounded-md
-            font-medium
-            shadow-sm
-            hover:bg-gray-50
-            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-opacity-50 {/* Added focus styles */}
-            transition ease-in-out duration-150 {/* Added hover transition */}
-            ${loading ? 'opacity-50 cursor-not-allowed' : ''}
-          `}
+          className={`w-full flex items-center justify-center py-2 px-4 bg-white text-gray-700 border border-gray-300 rounded-md font-medium shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-150 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           {loading ? (
             <svg
@@ -146,8 +117,6 @@ const LoginPage: React.FC = () => {
         <div className="text-center text-gray-500 text-xs mt-6">
           Secure login powered by OAuth 2.0
         </div>
-
-        
       </div>
     </div>
   );
