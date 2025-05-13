@@ -29,12 +29,15 @@ const LoginPage: React.FC = () => {
 
     if (token) {
       try {
-        // Store token in localStorage
-        localStorage.setItem('token', token as string);
-        console.log('Token stored successfully:', token);
-        router.push('https://xeno-mini-crm-ten.vercel.app/dashboard'); // Redirect to the dashboard after successful login
+        // Check if token is already in localStorage to avoid overwriting
+        if (!localStorage.getItem('token')) {
+          localStorage.setItem('token', token as string);
+          console.log('Token stored successfully:', token);
+        }
+        router.push('/dashboard'); // Redirect to the dashboard after successful login
       } catch (storageError) {
         setError('Unable to store authentication token');
+        console.error('Error storing token:', storageError);
       }
     }
 

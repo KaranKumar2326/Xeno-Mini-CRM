@@ -3,9 +3,17 @@ import { useRouter } from 'next/router';
 import {
   BarChart3, Users, MessageSquare, PieChart, Mail, 
   TrendingUp, Settings, Bell, Search, LogOut, 
-  ChevronRight, Home, Calendar, Plus, Filter, Menu, X
+  ChevronRight, Plus, Filter, Menu, X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+import Customers from '../components/Customers';
+import Campaigns from '../components/Campaigns';
+import Segments from '../components/Segments';
+import Templates from '../components/Templates';
+import Analytics from '../components/Analytics';
+import SettingsPage from '../components/Settings';
+
 
 // Types
 type User = {
@@ -103,6 +111,18 @@ const AnimatedBall = () => (
   />
 );
 
+// Page Components
+
+
+
+
+
+
+
+
+
+
+
 // Main Dashboard Component
 const Dashboard = () => {
   const router = useRouter();
@@ -144,7 +164,6 @@ const Dashboard = () => {
       return;
     }
 
-    // Decode JWT to get user info
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       setUser({
@@ -177,6 +196,148 @@ const Dashboard = () => {
     { icon: <Settings size={18} />, label: 'Settings', id: 'settings' }
   ];
 
+  const renderContent = () => {
+    switch (activeMenu) {
+      case 'customers':
+        return <Customers />;
+      case 'segments':
+        return <Segments />;
+      case 'campaigns':
+        return <Campaigns />;
+      case 'templates':
+        return <Templates />;
+      case 'analytics':
+        return <Analytics />;
+      case 'settings':
+        return <SettingsPage />;
+      case 'dashboard':
+      default:
+        return (
+          <>
+            {/* User Profile Section */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-shrink-0 relative">
+                  <img 
+                    src={user.photo} 
+                    alt={user.name}
+                    className="h-24 w-24 rounded-full object-cover border-4 border-indigo-100"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/default-avatar.png';
+                    }}
+                  />
+                </div>
+                <div className="text-center md:text-left">
+                  <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
+                  <p className="text-gray-600 mt-1">{user.email}</p>
+                  <p className="text-sm text-indigo-600 mt-2 bg-indigo-50 px-3 py-1 rounded-full inline-block">
+                    {user.role}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+              <StatCard 
+                title="Total Customers" 
+                value={stats.totalCustomers.toLocaleString()} 
+                icon={<Users size={18} className="text-indigo-500" />} 
+                trend="up"
+              />
+              <StatCard 
+                title="Active Segments" 
+                value={stats.activeSegments} 
+                icon={<PieChart size={18} className="text-green-500" />}
+              />
+              <StatCard 
+                title="Campaigns Sent" 
+                value={stats.campaignsSent} 
+                icon={<MessageSquare size={18} className="text-blue-500" />}
+              />
+              <StatCard 
+                title="Avg. Open Rate" 
+                value={stats.openRate} 
+                icon={<TrendingUp size={18} className="text-amber-500" />}
+                trend="up"
+              />
+            </div>
+
+            {/* Campaigns Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              {/* Recent Campaigns */}
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+                  <h3 className="font-medium text-gray-900">Recent Campaigns</h3>
+                  <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+                    View all <ChevronRight size={16} className="ml-1" />
+                  </button>
+                </div>
+                <div className="p-4 space-y-3">
+                  {recentCampaigns.map(campaign => (
+                    <CampaignItem key={campaign.id} campaign={campaign} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Upcoming Campaigns */}
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+                  <h3 className="font-medium text-gray-900">Upcoming Campaigns</h3>
+                  <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+                    Create new <Plus size={16} className="ml-1" />
+                  </button>
+                </div>
+                <div className="p-4 space-y-3">
+                  {upcomingCampaigns.length > 0 ? (
+                    upcomingCampaigns.map(campaign => (
+                      <CampaignItem key={campaign.id} campaign={campaign} />
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">No upcoming campaigns</p>
+                      <button className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">
+                        Schedule Campaign
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="font-medium text-gray-900">Quick Actions</h3>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <QuickAction
+                    title="Create Segment"
+                    description="Define your audience with custom rules"
+                    icon={<Users size={18} className="text-indigo-500" />}
+                    onClick={() => setActiveMenu('segments')}
+                  />
+                  <QuickAction
+                    title="New Campaign"
+                    description="Start a new marketing campaign"
+                    icon={<MessageSquare size={18} className="text-blue-500" />}
+                    onClick={() => setActiveMenu('campaigns')}
+                  />
+                  <QuickAction
+                    title="View Analytics"
+                    description="Check performance metrics"
+                    icon={<TrendingUp size={18} className="text-green-500" />}
+                    onClick={() => setActiveMenu('analytics')}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        );
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-50">
@@ -202,11 +363,10 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div className={`${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transform transition-transform duration-200 ease-in-out fixed lg:relative z-40 w-72 bg-gray-900 h-full shadow-lg`}>
         <div className="p-6">
-          {/* Xeno CRM */}
-            <div className="flex items-center space-x-2">
-                <AnimatedBall />
-                <h1 className="text-2xl font-bold text-white">Xeno CRM</h1>
-            </div>
+          <div className="flex items-center space-x-2">
+            <AnimatedBall />
+            <h1 className="text-2xl font-bold text-white">Xeno CRM</h1>
+          </div>
         </div>
         
         {/* Navigation */}
@@ -279,136 +439,7 @@ const Dashboard = () => {
 
         {/* Dashboard Content */}
         <main className="p-6">
-          {activeMenu === 'dashboard' ? (
-            <>
-              {/* User Profile Section */}
-              <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
-                <div className="flex flex-col md:flex-row items-center gap-6">
-                  <div className="flex-shrink-0 relative">
-                    <img 
-                      src={user.photo} 
-                      alt={user.name}
-                      className="h-24 w-24 rounded-full object-cover border-4 border-indigo-100"
-                      onError={(e) => {
-                        console.log('Image load error:', e);
-                        (e.target as HTMLImageElement).src = '/default-avatar.png';
-                      }}
-                    />
-                    
-                  </div>
-                  <div className="text-center md:text-left">
-                    <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
-                    <p className="text-gray-600 mt-1">{user.email}</p>
-                    <p className="text-sm text-indigo-600 mt-2 bg-indigo-50 px-3 py-1 rounded-full inline-block">
-                      {user.role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-                <StatCard 
-                  title="Total Customers" 
-                  value={stats.totalCustomers.toLocaleString()} 
-                  icon={<Users size={18} className="text-indigo-500" />} 
-                  trend="up"
-                />
-                <StatCard 
-                  title="Active Segments" 
-                  value={stats.activeSegments} 
-                  icon={<PieChart size={18} className="text-green-500" />}
-                />
-                <StatCard 
-                  title="Campaigns Sent" 
-                  value={stats.campaignsSent} 
-                  icon={<MessageSquare size={18} className="text-blue-500" />}
-                />
-                <StatCard 
-                  title="Avg. Open Rate" 
-                  value={stats.openRate} 
-                  icon={<TrendingUp size={18} className="text-amber-500" />}
-                  trend="up"
-                />
-              </div>
-
-              {/* Campaigns Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                {/* Recent Campaigns */}
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                  <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-                    <h3 className="font-medium text-gray-900">Recent Campaigns</h3>
-                    <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                      View all <ChevronRight size={16} className="ml-1" />
-                    </button>
-                  </div>
-                  <div className="p-4 space-y-3">
-                    {recentCampaigns.map(campaign => (
-                      <CampaignItem key={campaign.id} campaign={campaign} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Upcoming Campaigns */}
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                  <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-                    <h3 className="font-medium text-gray-900">Upcoming Campaigns</h3>
-                    <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                      Create new <Plus size={16} className="ml-1" />
-                    </button>
-                  </div>
-                  <div className="p-4 space-y-3">
-                    {upcomingCampaigns.length > 0 ? (
-                      upcomingCampaigns.map(campaign => (
-                        <CampaignItem key={campaign.id} campaign={campaign} />
-                      ))
-                    ) : (
-                      <div className="text-center py-8">
-                        <p className="text-gray-500">No upcoming campaigns</p>
-                        <button className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">
-                          Schedule Campaign
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-medium text-gray-900">Quick Actions</h3>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <QuickAction
-                      title="Create Segment"
-                      description="Define your audience with custom rules"
-                      icon={<Users size={18} className="text-indigo-500" />}
-                      onClick={() => setActiveMenu('segments')}
-                    />
-                    <QuickAction
-                      title="New Campaign"
-                      description="Start a new marketing campaign"
-                      icon={<MessageSquare size={18} className="text-blue-500" />}
-                      onClick={() => setActiveMenu('campaigns')}
-                    />
-                    <QuickAction
-                      title="View Analytics"
-                      description="Check performance metrics"
-                      icon={<TrendingUp size={18} className="text-green-500" />}
-                      onClick={() => setActiveMenu('analytics')}
-                    />
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 capitalize">{activeMenu}</h2>
-              <p className="text-gray-500">This is the {activeMenu} page content.</p>
-            </div>
-          )}
+          {renderContent()}
         </main>
       </div>
     </div>
