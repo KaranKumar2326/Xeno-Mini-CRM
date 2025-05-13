@@ -31,7 +31,8 @@ const LoginPage: React.FC = () => {
       try {
         // Store token in localStorage
         localStorage.setItem('token', token as string);
-        router.push('/dashboard'); // Redirect to the dashboard after successful login
+        console.log('Token stored successfully:', token);
+        router.push('https://xeno-mini-crm-ten.vercel.app/dashboard'); // Redirect to the dashboard after successful login
       } catch (storageError) {
         setError('Unable to store authentication token');
       }
